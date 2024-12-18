@@ -1,0 +1,65 @@
+#This compose file adds draw.io to your stack
+version: '3.5'
+services:
+  drawio:
+    image: jgraph/drawio
+    container_name: drawio
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+      - 8443:8443
+    environment:
+      PUBLIC_DNS: domain
+      ORGANISATION_UNIT: unit
+      ORGANISATION: org
+      CITY: city
+      STATE: state
+      COUNTRY_CODE: country
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+这个Docker Compose文件定义了一个包含draw.io服务的Docker容器配置。下面是每个部分的详细解释：
+
+1. `version: '3.5'`：
+   - 指定了Docker Compose文件的版本，这里是版本3.5。
+
+2. `services:`：
+   - 定义了服务的列表，这里只有一个服务`drawio`。
+
+3. `drawio:`：
+   - 定义了名为`drawio`的服务。
+
+4. `image: jgraph/drawio`：
+   - 指定了服务使用的Docker镜像，这里是`jgraph/drawio`。
+
+5. `container_name: drawio`：
+   - 为容器指定了一个名称`drawio`，这样在Docker中可以通过这个名称来引用容器。
+
+6. `restart: unless-stopped`：
+   - 设置了容器的重启策略。`unless-stopped`意味着容器将在退出时自动重启，除非它是被用户明确停止的。
+
+7. `ports:`：
+   - 定义了端口映射，将容器内部的8080和8443端口映射到宿主机的8080和8443端口。
+
+8. `environment:`：
+   - 设置了环境变量，这些变量将在容器启动时传递给容器内部的应用。
+     - `PUBLIC_DNS: domain`：设置公共DNS域名。
+     - `ORGANISATION_UNIT: unit`：设置组织单位。
+     - `ORGANISATION: org`：设置组织名称。
+     - `CITY: city`：设置城市。
+     - `STATE: state`：设置州/省。
+     - `COUNTRY_CODE: country`：设置国家代码。
+
+9. `healthcheck:`：
+   - 定义了健康检查的配置，用于定期检查容器内服务的状态。
+     - `test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]`：健康检查的命令，这里使用`curl`尝试访问`http://domain:8080`，如果请求失败则退出状态为1。
+     - `interval: 1m30s`：健康检查的间隔时间，这里是1分钟30秒。
+     - `timeout: 10s`：健康检查的超时时间，这里是10秒。
+     - `retries: 5`：如果连续失败多少次后认为服务不健康，这里是5次。
+     - `start_period: 10s`：在容器启动后等待的时间，之后才开始健康检查，这里是10秒。
+
+这个Docker Compose文件允许您在一个配置文件中定义draw.io服务的部署和运行参数，使得管理和部署draw.io服务变得更加简单。
+
